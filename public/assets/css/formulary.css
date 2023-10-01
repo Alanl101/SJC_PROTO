@@ -1,0 +1,46 @@
+
+
+
+#row1 {
+    background-color: #73178f;
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Style for each form */
+#filters-search {
+    flex: 1;
+    margin: 0 5px; /* Add some spacing between forms */
+}
+
+#header-search{
+    flex: 1;
+    margin: 0 5px; 
+}
+
+/* Add border to the table */
+table {
+    border-collapse: collapse; /* Merge cell borders */
+    border: 2px solid #000; /* 2px solid black border */
+    width: 100%; /* Ensure the table takes full width */
+    
+}
+
+/* Style table headers (optional) */
+table th {
+    background-color: #333; /* Background color for headers */
+    color: white; /* Text color for headers */
+    border: 2px solid #000; /* 2px solid black border */
+    padding: 10px; /* Padding for headers */
+    text-align: center; /* Left-align header text */
+}
+
+/* Style table cells (td) in the tbody */
+table tbody td {
+    border: 2px solid #000; /* 2px solid black border */
+    padding: 5px; /* Adjust padding as needed */
+    text-align: left; /* Left-align cell content */
+}
