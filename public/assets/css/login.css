@@ -1,0 +1,42 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.signin-container {
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    margin: 0 auto; /* Center horizontally */
+    padding: 20px; /* Add padding to both sides */
+    width: 400px; /* Set a fixed width */
+}
+
+.signin-container h2 {
+    margin-bottom: 20px;
+}
+
+.signin-container label {
+    
+    text-align: center; /* Center the text within the label */
+    margin-bottom: 10px;
+    width: 50%; /* Make input fields 100% wide */
+    margin: 0 auto; /* Center horizontally */
+}
+
+.signin-container input {
+    display: block; /* Make input fields inline-block to center-align */
+    margin: 0 auto; /* Center horizontally */
+    padding: 5px;
+    width: 50%;
+}
+
+/* Center the submit button horizontally */
+.signin-container input[type="submit"] {
+    margin: 0 auto;
+    width: 50%; /* Make the button 100% wide */
+}
