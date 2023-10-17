@@ -1,6 +1,8 @@
 <?php
 
-class Formulary extends Controller{
+class Formulary{
+    use Controller;
+
     public function index(){
         $this->view('formulary');
     }

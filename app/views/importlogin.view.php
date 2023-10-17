@@ -6,6 +6,7 @@
 </head>
 <body>
     <div class="signin-container">
+        <img src='../public/assets/images/SJC-logo.jpg' id='SJCImage' alt="San Jose Clinc logo">
         <h2>Sign In</h2>
         <form method="post" action="process_login.php">
             <label for="username">Username:</label>

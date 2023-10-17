@@ -40,3 +40,7 @@ body {
     margin: 0 auto;
     width: 50%; /* Make the button 100% wide */
 }
+
+#SJCImage {
+    width: 30%; /* Adjust the percentage to make it smaller as per your requirements */
+  }

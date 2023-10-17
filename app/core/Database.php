@@ -1,8 +1,11 @@
 <?php
 
 
-class Database {
+trait Database {
 
+
+
+    
     // Connect to the database
     private function connect() {
         // To connect to a server, a client needs to know where it is.
