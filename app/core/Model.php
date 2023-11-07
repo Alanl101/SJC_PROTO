@@ -7,10 +7,6 @@ trait Model{
     // login by calling the 
     public function login($username, $password, $table) {
 
-        //
-
-
-
         $queryString = "SELECT * FROM $table WHERE username = :username";
         $user = $this->get_row($queryString, ['username' => $username]);
     

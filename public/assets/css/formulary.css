@@ -13,12 +13,26 @@
 /* Style for each form */
 #filters-search {
     flex: 1;
-    margin: 0 5px; /* Add some spacing between forms */
 }
 
 #header-search{
     flex: 1;
     margin: 0 5px; 
+    display: flex;
+}
+
+#default-filter{
+    color: gray;
+}
+
+/* Style for the location filter */
+#applied-filter{
+    color: black;
+}
+
+
+.filter-items{
+    color: black;
 }
 
 /* Add border to the table */
