@@ -43,15 +43,33 @@ trait Database {
         $prepared_query = $con->prepare($query);
         $check = $prepared_query->execute($data);
         if($check){
-            // Return all in an array form
+            // get all data in an array form
             $result = $prepared_query->fetchAll(PDO::FETCH_ASSOC);
             if(is_array($result) && count($result)){
-                return $result[0];
+                return $result[0]; // return the first row only
             }
         }
         return false;
     }
 
+    // Get each row for Formulary info used by Model.php
+    public function get_rows($query) {
+        try {
+            $con = $this->connect();
+            $prepared_query = $con->prepare($query);
+            $check = $prepared_query->execute();
+    
+            if ($check) {
+                return $prepared_query->fetchAll(PDO::FETCH_ASSOC);
+            } else {
+                $errorInfo = $prepared_query->errorInfo();
+                throw new Exception("Query execution failed: {$errorInfo[2]}");
+            }
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+            return null;
+        }
+    }
     
 }
 

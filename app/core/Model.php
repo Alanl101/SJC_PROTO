@@ -21,6 +21,38 @@ trait Model{
     
         return false; // Return false if the login fails
     }
+
+
+    public function getFormularyData(){
+        // select columns from multiple tables returned as an array
+        $query = "SELECT 
+            `location`.`LocationLongName`, 
+            `drugcategory`.`DrugCategoryName`, 
+            `sourcetype`.`sourceTypeName`, 
+            `medications`.`PkgSize`, 
+            `medications`.`MedicationName`, 
+            `medications`.`Strength`, 
+            `inventory`.`OnHandCount`
+        FROM 
+            `location`
+        LEFT JOIN 
+            (
+                `inventory` 
+                LEFT JOIN 
+                `medications` ON `inventory`.`MedicationID` = `medications`.`MedicationID`
+            ) ON `inventory`.`LocationID` = `location`.`LocationID`
+        LEFT JOIN 
+            `drugcategory` ON `medications`.`DrugCategoryID` = `drugcategory`.`DrugCategoryID`
+        LEFT JOIN 
+            `sourcetype` ON `medications`.`SourceTypeID` = `sourcetype`.`SourceTypeID`";
+        
+        $formularyData = $this->get_rows($query);
+        if($formularyData){
+            return $formularyData;
+        }else{
+            echo "Formulary data error";
+        }
+    }
     
 
 

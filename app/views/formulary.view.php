@@ -1,51 +1,64 @@
 <?php
 
-    $location = isset($_POST['location']) ? $_POST['location'] : 'Location';
-    $drugCat = isset($_POST['drugCat']) ? $_POST['drugCat'] : 'Drug Category';
-    $drugSrc = isset($_POST['drugSrc']) ? $_POST['drugSrc'] : 'Drug Source';
+    require_once '../app/controllers/Formulary.php';
+
+    $location = isset($_POST['location']) ? $_POST['location'] : 'LocationLongName';
+    $drugCat = isset($_POST['drugCat']) ? $_POST['drugCat'] : 'DrugCategoryName';
+    $drugSrc = isset($_POST['drugSrc']) ? $_POST['drugSrc'] : 'sourceTypeName';
     $seachDrug = isset($_POST['search']) ? $_POST['search'] : '';
 
 
     if (isset($_POST['reset'])) {
-        $location = "Location";
-        $drugCat = "Drug Category";
-        $drugSrc = "Drug Source";
+        $location = "LocationLongName";
+        $drugCat = "DrugCategoryName";
+        $drugSrc = "sourceTypeName";
         $seachDrug = "";
     }
+    
+    
+
+    $result = $this->getdatatable();
+    $rowNumber = 0;
 
 
-    $result = [
-        ['Location' => 'Milwaukee', 'Drug Category' => 'Over-the-Counter', 'Drug Source' => 'Purchased', 'Drug Packet Size' => '10 tablets', 'Drug Name' => 'Aspirin', 'Strength' => '325 mg', 'Inventory' => 1000],
-        ['Location' => 'Houston', 'Drug Category' => 'Prescription', 'Drug Source' => 'PAP', 'Drug Packet Size' => '20 capsules', 'Drug Name' => 'Amoxicillin', 'Strength' => '500 mg', 'Inventory' => 500],
-        ['Location' => 'Houston', 'Drug Category' => 'Prescription', 'Drug Source' => 'PAP', 'Drug Packet Size' => '30 tablets', 'Drug Name' => 'Advil', 'Strength' => '10 mg', 'Inventory' => 750],
-        ['Location' => 'Houston', 'Drug Category' => 'Over-the-Counter', 'Drug Source' => 'Donated', 'Drug Packet Size' => '50 tablets', 'Drug Name' => 'Atorvastatin', 'Strength' => '325 mg', 'Inventory' => 1000],
-        ['Location' => 'Houston', 'Drug Category' => 'Prescription', 'Drug Source' => 'Purchased', 'Drug Packet Size' => '60 capsules', 'Drug Name' => 'Albuterol', 'Strength' => '20 mg', 'Inventory' => 300],
-        ['Location' => 'Houston', 'Drug Category' => 'Prescription', 'Drug Source' => 'PAP', 'Drug Packet Size' => '30 tablets', 'Drug Name' => 'Lisinopril', 'Strength' => '10 mg', 'Inventory' => 750],
-        ['Location' => 'Milwaukee', 'Drug Category' => 'Prescription', 'Drug Source' => 'Donated', 'Drug Packet Size' => '30 tablets', 'Drug Name' => 'Ibuprofen', 'Strength' => '200 mg', 'Inventory' => 800],
-        ['Location' => 'Dallas', 'Drug Category' => 'Over-the-Counter', 'Drug Source' => 'Donated', 'Drug Packet Size' => '30 tablets', 'Drug Name' => 'Ibuprofen', 'Strength' => '200 mg', 'Inventory' => 800],
-        ['Location' => 'Milwaukee', 'Drug Category' => 'Over-the-Counter', 'Drug Source' => 'Phurchased', 'Drug Packet Size' => '10 tablets', 'Drug Name' => 'Aspirin', 'Strength' => '325 mg', 'Inventory' => 1000]
-    ];
+    /*  ---------- Test data output --------------
+    if ($result !== null) {
+        foreach ($result as $row) {
+            echo "row " . $rowNumber . '<br>' ;
+            echo "Location Short Name: " . $row['LocationLongName'] . '<br>';
+            echo "Drug Category Name: " . $row['DrugCategoryName'] . '<br>';
+            echo "Source ID: " . $row['sourceTypeName'] . '<br>';
+            echo "Package Size: " . $row['PkgSize'] . '<br>';
+            echo "Medication Name: " . $row['MedicationName'] . '<br>';
+            echo "Strength: " . $row['Strength'] . '<br>';
+            echo "On Hand Count: " . $row['OnHandCount'] . '<br>';
+            $rowNumber++;
+        }
+    } else {
+        echo "Error fetching formulary data.";
+    }
+    */
 
-    $drugs = ['Aspirin', 'Ibuprofen', 'Acetaminophen', 'Amoxicillin', 'Ciprofloxacin', 'Lisinopril', 'Atorvastatin', 'Metformin', 'Simvastatin', 'Prednisone', 'Albuterol', 'Doxycycline', 'Omeprazole', 'Hydrochlorothiazide', 'Warfarin', 'Gabapentin', 'Losartan', 'Sertraline', 'Trazodone', 'Amlodipine'];
+    $drugCategories = ['Alpha-/Beta Agonist','Analgesic','Analgesics','Anti - infective','Anti-Allergies','Antibiotic','Antibiotic Ophthalmic','Anticonvulsant','antidepressant','Anti-diarrheal','Antiemetic','Antigout','Antihistamine','Antihistamines','Antihypertensive','Anti-infective','Anti-infective Penicillin','Antimalarial','Antimetabolite','Antipsychotic','Antirheumatics-arthritis','Antitibubercular Agent','Asthma/Allergy','Asthma\Allergy','Cardiovascular','Cardiovascular Agent','CNS Agent','Dental','Dermatological','Dermatological Agent','Endocrine','Endocrine - Diabetes','Endocrine - Hormone','Endocrine - Thyroid','Endocrine- Diabetes','Endocrine-Diabetes','Endocrine-Hormone','Endocrine-Thyroid','Endrocrine-Hormone','Eye drops','Eye Wash','Gastrointestinal','Genitourinary','Harmone','Hematological','Immunosuppressive','Levonogestrel/Ethinyl Estradiol','Miscellaneous','Musculoskeletal','Musculoskeletal Skeletal/Muscle Relaxants','Neurological','Ophthalmic','Ophthalmologic Agent','Opthalmic','Psychotropic','Respiratory','Vitamin Supplement'];
 
     $filteredResult = [];
-
     
+
     foreach ($result as $row) {
     
-        if ($location === $row['Location'] && $drugCat === $row['Drug Category'] && $drugSrc === $row['Drug Source']) {
+        if ($location === $row['LocationLongName'] && $drugCat === $row['DrugCategoryName'] && $drugSrc === $row['sourceTypeName']) {
             $filteredResult[] = $row;
-        }elseif($location === $row['Location'] && $drugCat === $row['Drug Category'] && $drugSrc === 'Drug Source' ){
+        }elseif($location === $row['LocationLongName'] && $drugCat === $row['DrugCategoryName'] && $drugSrc === 'sourceTypeName' ){
             $filteredResult[] = $row;
-        }elseif($location === $row['Location'] && $drugCat === 'Drug Category' && $drugSrc === $row['Drug Source'] ){
+        }elseif($location === $row['LocationLongName'] && $drugCat === 'DrugCategoryName' && $drugSrc === $row['sourceTypeName'] ){
             $filteredResult[] = $row;
-        }elseif($location === 'Location' && $drugCat === $row['Drug Category'] && $drugSrc === $row['Drug Source'] ){
+        }elseif($location === 'LocationLongName' && $drugCat === $row['DrugCategoryName'] && $drugSrc === $row['sourceTypeName'] ){
             $filteredResult[] = $row;
-        }elseif($location === $row['Location'] && $drugCat === 'Drug Category' && $drugSrc === 'Drug Source' ){
+        }elseif($location === $row['LocationLongName'] && $drugCat === 'DrugCategoryName' && $drugSrc === 'sourceTypeName' ){
             $filteredResult[] = $row;
-        }elseif($location === 'Location' && $drugCat === $row['Drug Category'] && $drugSrc === 'Drug Source' ){
+        }elseif($location === 'LocationLongName' && $drugCat === $row['DrugCategoryName'] && $drugSrc === 'sourceTypeName' ){
             $filteredResult[] = $row;
-        }elseif($location === 'Location' && $drugCat === 'Drug Category' && $drugSrc === $row['Drug Source'] ){
+        }elseif($location === 'LocationLongName' && $drugCat === 'DrugCategoryName' && $drugSrc === $row['sourceTypeName'] ){
             $filteredResult[] = $row;
         }
     }
@@ -56,7 +69,7 @@
         //search for drug strings matching in filters results 
         foreach($filteredResult as $row){
 
-            if(strpos(strtolower($row['Drug Name']), strtolower($seachDrug)) === 0) {
+            if(strpos(strtolower($row['MedicationName']), strtolower($seachDrug)) === 0) {
                 $searchResult[] = $row;
             }
             
@@ -65,7 +78,7 @@
     }// search for drug string matching in results if there are no filters
     elseif($filteredResult === []){
         foreach($result as $row){
-            $lcDrugName = strtolower($row['Drug Name']);
+            $lcDrugName = strtolower($row['MedicationName']);
             $lcSeachDrug = strtolower($seachDrug);
             
             if(strpos($lcDrugName, $lcSeachDrug) === 0){
@@ -88,64 +101,60 @@
     <div id='row1'>
         <!-- Form 1 - Dropdown Menu Filters -->
         <form id='filters-search' method="post">
-            <select id="<?php echo $location === 'Location' ? 'default-filter' : 'applied-filter'; ?>" name="location">
+            <select id="<?php 
+                echo $location === 'LocationLongName' ? 'default-filter' : 'applied-filter'; ?>" name="location">
                 <?php
                 
-                    if ($location === 'Location') {
-                        echo '<option value="" disabled selected hidden>Location</option>';
+                    if ($location === 'LocationLongName') {
+                       echo '<option value="" disabled selected hidden>Location</option>';
                     }
-                    if ($location !== 'Location') {
-                        echo '<option value="' . $location . '" class="filter-items" > ' . $location . '</option>';
+                    elseif ($location !== 'LocationLongNameon') {
+                        echo '<option value="' . $location . '">' . $location . '</option>';
                     }
-                    // Add an if condition to avoid showing the selected value as an option
-                    if ($location !== 'Milwaukee') {
-                        echo '<option value="Milwaukee" class="filter-items">Milwaukee</option>';
+                    if ($location !== 'Midtown') {
+                        echo '<option value="Midtown" class="filter-items">Midtown</option>';
                     }
-                    // Add an if condition to avoid showing the selected value as an option
-                    if ($location !== 'Houston') {
-                        echo '<option value="Houston" class="filter-items">Houston</option>';
+                    if ($location !== 'Fort Bend') {
+                        echo '<option value="Fort Bend" class="filter-items">Fort Bend</option>';
                     }
                 ?>
             </select>
 
-            <select id="<?php echo $drugCat === 'Drug Category' ? 'default-filter' : 'applied-filter'; ?>" name="drugCat">
+            <select id="<?php echo $drugCat === 'DrugCategoryName' ? 'default-filter' : 'applied-filter'; ?>" name="drugCat">
                 <?php
                     
-                    if ($drugCat === 'Drug Category') {
-                        echo '<option value="" disabled selected hidden>Drug Category</option>';
+                    
+                    
+
+                    if ($drugCat === 'DrugCategoryName') {
+                       echo '<option value="" disabled selected hidden>Drug Category</option>';
                     }
-                    if ($drugCat !== 'Drug Category') {
+                    elseif ($drugCat !== 'Drug Category') {
                         echo '<option value="' . $drugCat . '">' . $drugCat . '</option>';
                     }
-                    // Add an if condition to avoid showing the selected value as an option
-                    if ($drugCat !== 'Over-the-Counter') {
-                        echo '<option value="Over-the-Counter" class="filter-items">Over-the-Counter</option>';
-                    }
-                    // Add an if condition to avoid showing the selected value as an option
-                    if ($drugCat !== 'Prescription') {
-                        echo '<option value="Prescription" class="filter-items">Prescription</option>';
+                    foreach ($drugCategories as $name) {
+                        if ($drugCat !== $name) {
+                            echo '<option value="' . $name . '" class="filter-items">' . $name . '</option>';
+                        }
                     }
                 ?>
             </select>
 
-            <select id="<?php echo $drugSrc === 'Drug Source' ? 'default-filter' : 'applied-filter'; ?>" name="drugSrc">
+            <select id="<?php echo $drugSrc === 'sourceTypeName' ? 'default-filter' : 'applied-filter'; ?>" name="drugSrc">
                 <?php
                     
-                    if ($drugSrc === 'Drug Source') {
+                    if ($drugSrc === 'sourceTypeName') {
                         echo '<option value="" disabled selected hidden>Drug Source</option>';
                     }
-                    if ($drugSrc !== 'Drug Source') {
+                    elseif ($drugSrc !== 'Drug Source') {
                         echo '<option value="' . $drugSrc . '" >' . $drugSrc . '</option>';
                     }
-                    // Add an if condition to avoid showing the selected value as an option
                     if ($drugSrc !== 'Donated') {
                         echo '<option value="Donated" class="filter-items">Donated</option>';
                     }
-                    // Add an if condition to avoid showing the selected value as an option
                     if ($drugSrc !== 'Purchased') {
                         echo '<option value="Purchased" class="filter-items">Purchased</option>';
                     }
-                    // Add an if condition to avoid showing the selected value as an option
                     if ($drugSrc !== 'PAP') {
                         echo '<option value="PAP" class="filter-items">PAP</option>';
                     }
@@ -159,7 +168,7 @@
 
         <!-- Form 2 - Search Bar -->
         <form id='header-search' method="post">
-            <input type="text" id="search" name="search" placeholder="search">
+            <input type="text" id="search" name="search" placeholder="Search Drug Name">
             <input type="hidden" name="location" value="<?= $location ?>">
             <input type="hidden" name="drugCat" value="<?= $drugCat ?>">
             <input type="hidden" name="drugSrc" value="<?= $drugSrc ?>">
@@ -190,38 +199,38 @@
                 if($searchResult){
                     foreach ($searchResult as $row) : ?>
                     <tr>
-                        <td><?php echo $row['Location']; ?></td>
-                        <td><?php echo $row['Drug Category']; ?></td>
-                        <td><?php echo $row['Drug Source']; ?></td>
-                        <td><?php echo $row['Drug Packet Size']; ?></td>
-                        <td><?php echo $row['Drug Name']; ?></td>
+                        <td><?php echo $row['LocationLongName']; ?></td>
+                        <td><?php echo $row['DrugCategoryName']; ?></td>
+                        <td><?php echo $row['sourceTypeName']; ?></td>
+                        <td><?php echo $row['PkgSize']; ?></td>
+                        <td><?php echo $row['MedicationName']; ?></td>
                         <td><?php echo $row['Strength']; ?></td>
-                        <td><?php echo $row['Inventory']; ?></td>
+                        <td><?php echo $row['OnHandCount']; ?></td>
                     </tr>
                     <?php endforeach;
                 }
                 elseif($filteredResult){
                     foreach ($filteredResult as $row) : ?>
                     <tr>
-                        <td><?php echo $row['Location']; ?></td>
-                        <td><?php echo $row['Drug Category']; ?></td>
-                        <td><?php echo $row['Drug Source']; ?></td>
-                        <td><?php echo $row['Drug Packet Size']; ?></td>
-                        <td><?php echo $row['Drug Name']; ?></td>
+                        <td><?php echo $row['LocationLongName']; ?></td>
+                        <td><?php echo $row['DrugCategoryName']; ?></td>
+                        <td><?php echo $row['sourceTypeName']; ?></td>
+                        <td><?php echo $row['PkgSize']; ?></td>
+                        <td><?php echo $row['MedicationName']; ?></td>
                         <td><?php echo $row['Strength']; ?></td>
-                        <td><?php echo $row['Inventory']; ?></td>
+                        <td><?php echo $row['OnHandCount']; ?></td>
                     </tr>
                     <?php endforeach;
                 }else{
                     foreach ($result as $row) : ?>
                         <tr>
-                            <td><?php echo $row['Location']; ?></td>
-                            <td><?php echo $row['Drug Category']; ?></td>
-                            <td><?php echo $row['Drug Source']; ?></td>
-                            <td><?php echo $row['Drug Packet Size']; ?></td>
-                            <td><?php echo $row['Drug Name']; ?></td>
+                            <td><?php echo $row['LocationLongName']; ?></td>
+                            <td><?php echo $row['DrugCategoryName']; ?></td>
+                            <td><?php echo $row['sourceTypeName']; ?></td>
+                            <td><?php echo $row['PkgSize']; ?></td>
+                            <td><?php echo $row['MedicationName']; ?></td>
                             <td><?php echo $row['Strength']; ?></td>
-                            <td><?php echo $row['Inventory']; ?></td>
+                            <td><?php echo $row['OnHandCount']; ?></td>
                         </tr>
                         <?php endforeach;
                 }
